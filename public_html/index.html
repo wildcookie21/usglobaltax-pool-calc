@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Input Sheet Upload</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <div class="page">
+
+    <header class="header">
+      <div class="header__container">
+
+        <a class="logo" href="/">
+          <img class="logo__image" src="images/logo.jpg" alt="US Global Tax">
+        </a>
+
+        <nav class="header__nav nav">
+          <a class="nav__link" href="#">Services</a>
+          <a class="nav__link" href="#">For Individuals</a>
+          <a class="nav__link" href="#">For Businesses</a>
+          <a class="nav__link" href="#">Resources</a>
+          <a class="nav__link" href="#">About Us</a>
+          <a class="nav__link" href="#">Contact</a>
+        </nav>
+
+        <div class="header__actions">
+          <a class="header__phone" href="tel:+442039978456">
+            +44 20 3997 8456
+          </a>
+
+          <a class="header__login button button--dark" href="#">
+            Client Login
+          </a>
+        </div>
+
+      </div>
+    </header>
+
+    <main class="main">
+
+      <section class="hero">
+        <div class="hero__container">
+
+          <div class="hero__content">
+            <h1 class="hero__title">
+              <span class="hero__title-word">INPUT</span>
+              <span class="hero__title-word hero__title-word--red">SHEET</span>
+            </h1>
+
+            <p class="hero__description">
+              Please upload your completed input sheet file to help us
+              process your tax report accurately and efficiently.
+            </p>
+
+            <div class="hero__buttons">
+              <a class="button button--primary" href="#">
+                Book a Consultation
+              </a>
+
+              <a class="button button--light" href="#">
+                Our Services
+              </a>
+            </div>
+          </div>
+
+          <div class="hero__media">
+            <img class="hero__image" src="images/hero-image.jpg" alt="">
+          </div>
+
+          <div class="hero__wave"></div>
+
+          <section class="hero__upload upload-card">
+            <h2 class="upload-card__title">
+              Upload Excel "INPUT SHEET" for the CGT Report
+            </h2>
+
+            <p class="upload-card__text">
+              Only Excel files (.xlsx, .xls) up to 10 MB are allowed.
+            </p>
+
+            <form class="upload-card__form upload-form" action="../cgt/upload.php" method="post" enctype="multipart/form-data">
+
+              <input id="input-sheet-file" class="upload-form__input" type="file" name="input_sheet_excel" accept=".xlsx,.xls" hidden>
+
+              <label class="upload-form__area">
+                <input class="upload-form__input" type="file" name="input_sheet" accept=".xlsx,.xls">
+                <span class="upload-form__button">
+                  Choose File
+                </span>
+              </label>
+
+              <div class="upload-form__file">
+                <span class="upload-form__file-icon"></span>
+                <span class="upload-form__file-name">No file selected</span>
+              </div>
+
+              <button class="upload-form__submit" type="submit">
+                Upload
+              </button>
+             
+
+            </form>
+
+            <form class="upload-card__form upload-form" action="../oanda/upload.php" method="post"
+              enctype="multipart/form-data">
+
+              <input id="oanda-file" class="upload-form__input" type="file" name="oanda_excel" accept=".xlsx,.xls"
+                hidden>
+
+              <label class="upload-form__admin" for="oanda-file">
+                OANDA database update (admin)
+              </label>
+
+            </form>
+
+          </section>
+
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="footer">
+      <div class="footer__container">
+
+        <div class="footer__item">
+          <span class="footer__icon footer__icon--shield">
+            <img src="images/shield.jpg" alt="Shield">
+          </span>
+          <span class="footer__text">
+            US & UK<br>Tax Experts
+          </span>
+        </div>
+
+        <div class="footer__item">
+          <span class="footer__icon footer__icon--globe">
+            <img src="images/globe.jpg" alt="Globe">
+          </span>
+          <span class="footer__text">
+            Serving<br>Expatriates Worldwide
+          </span>
+        </div>
+
+        <div class="footer__item">
+          <span class="footer__icon footer__icon--lock">
+            <img src="images/lock.jpg" alt="Lock">
+          </span>
+          <span class="footer__text">
+            Secure &<br>Confidential
+          </span>
+        </div>
+
+        <div class="footer__item">
+          <span class="footer__icon footer__icon--star">
+            <img src="images/star.jpg" alt="Star">
+          </span>
+          <span class="footer__text">
+            10+ Years of<br>Experience
+          </span>
+        </div>
+
+        <div class="footer__item">
+          <span class="footer__icon footer__icon--users">
+            <img src="images/users.jpg" alt="Users">
+          </span>
+          <span class="footer__text">
+            Personalized<br>Approach
+          </span>
+        </div>
+
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="js/app-oanda.js"></script>
+  <script src="js/app-input-sheet.js"></script>
+
+</body>
+
+</html>
