@@ -1,5 +1,5 @@
 <?php
-if ($_SERVER['REQUEST_METHOD'] !== 'POST' || empty($_FILES['file'])) {
+if ($_SERVER['REQUEST_METHOD'] !== 'POST' || empty($_FILES['input_sheet'])) {
   http_response_code(400);
   exit('Invalid request.');
 }
@@ -11,11 +11,13 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
-  $fileTmpPath = $_FILES['file']['tmp_name'];
-  $fileName = $_FILES['file']['name'];
-  $fileSize = $_FILES['file']['size'];
-  $fileType = $_FILES['file']['type'];
+
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['input_sheet'])) {
+  $fileTmpPath = $_FILES['input_sheet']['tmp_name'];
+  $fileName = $_FILES['input_sheet']['name'];
+  $fileSize = $_FILES['input_sheet']['size'];
+  $fileType = $_FILES['input_sheet']['type'];  
 
   $allowedTypes = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'];
   if (!in_array($fileType, $allowedTypes)) {
@@ -63,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
         }
 
         // Формируем финальную строку в формате 'dd.mm.yyyy'
-        $formattedDate = str_pad($day, 2, '0', STR_PAD_LEFT) . 'usglobaltax-pool-calc' . str_pad($month, 2, '0', STR_PAD_LEFT) . '.' . $year;
+        $formattedDate = str_pad($day, 2, '0', STR_PAD_LEFT) . '.' . str_pad($month, 2, '0', STR_PAD_LEFT) . '.' . $year;
       }
 
       // Добавляем отформатированную дату в массив

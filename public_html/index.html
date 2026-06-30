@@ -83,12 +83,10 @@
               Only Excel files (.xlsx, .xls) up to 10 MB are allowed.
             </p>
 
-            <form class="upload-card__form upload-form" action="../cgt/upload.php" method="post" enctype="multipart/form-data">
-
-              <input id="input-sheet-file" class="upload-form__input" type="file" name="input_sheet_excel" accept=".xlsx,.xls" hidden>
+            <form class="upload-card__form upload-form" action="cgt-upload.php" method="post" enctype="multipart/form-data">              
 
               <label class="upload-form__area">
-                <input class="upload-form__input" type="file" name="input_sheet" accept=".xlsx,.xls">
+                <input id="input-sheet-file" class="upload-form__input" type="file" name="input_sheet" accept=".xlsx,.xls">
                 <span class="upload-form__button">
                   Choose File
                 </span>
@@ -106,7 +104,7 @@
 
             </form>
 
-            <form class="upload-card__form upload-form" action="../oanda/upload.php" method="post"
+            <form class="upload-card__form upload-form" action="oanda-upload.php" method="post"
               enctype="multipart/form-data">
 
               <input id="oanda-file" class="upload-form__input" type="file" name="oanda_excel" accept=".xlsx,.xls"

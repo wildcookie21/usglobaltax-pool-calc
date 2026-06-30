@@ -1,5 +1,5 @@
 <?php
-if ($_SERVER['REQUEST_METHOD'] !== 'POST' || empty($_FILES['file'])) {
+if ($_SERVER['REQUEST_METHOD'] !== 'POST' || empty($_FILES['oanda_excel'])) {
   http_response_code(400);
   exit('Invalid request.');
 }
@@ -8,11 +8,11 @@ require_once __DIR__ . '/../bootstrap.php';
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {  
-  $fileTmpPath = $_FILES['file']['tmp_name'];
-  $fileName = $_FILES['file']['name'];
-  $fileSize = $_FILES['file']['size'];
-  $fileType = $_FILES['file']['type'];
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['oanda_excel'])) {  
+  $fileTmpPath = $_FILES['oanda_excel']['tmp_name'];
+  $fileName = $_FILES['oanda_excel']['name'];
+  $fileSize = $_FILES['oanda_excel']['size'];
+  $fileType = $_FILES['oanda_excel']['type'];
   
   $allowedTypes = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'];
   if (!in_array($fileType, $allowedTypes)) {
