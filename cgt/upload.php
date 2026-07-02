@@ -17,7 +17,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['input_sheet'])) {
   $fileTmpPath = $_FILES['input_sheet']['tmp_name'];
   $fileName = $_FILES['input_sheet']['name'];
   $fileSize = $_FILES['input_sheet']['size'];
-  $fileType = $_FILES['input_sheet']['type'];  
+  $fileType = $_FILES['input_sheet']['type'];
+
+  if (preg_match('/INPUT SHEET[^A-Za-z]*([A-Za-z].*?)\.[^.]+$/i', $fileName, $matches)) {
+    $clientName = trim($matches[1], " \t\n\r\0\x0B-_");    
+  }   
 
   $allowedTypes = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'];
   if (!in_array($fileType, $allowedTypes)) {
@@ -38,21 +42,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['input_sheet'])) {
 
     for ($row = 2; $row <= $highestRow; $row++) {
 
+      $dateValue = trim($sheet->getCell('A' . $row)->getFormattedValue());
+
       $dataType = $sheet->getCell('A' . $row)->getDataType();
 
       if ($dataType == \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC) {
+
         // Преобразуем числовое значение в объект DateTime
         $dateValue = $sheet->getCell('A' . $row)->getValue();
         $dateObject = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($dateValue);
 
-        // Преобразуем в формат 'm.d.Y'
-        $formattedDate = $dateObject->format('m.d.Y');
+        $formatCode = $sheet->getStyle('A' . $row)
+          ->getNumberFormat()
+          ->getFormatCode();
+
+        if (stripos($formatCode, 'dd') !== false && stripos($formatCode, 'mm') !== false) {
+          $ddPos = stripos($formatCode, 'dd');
+          $mmPos = stripos($formatCode, 'mm');
+
+          if ($ddPos < $mmPos) {
+            // Формат ячейки DD.MM.YYYY, но данные вводились как MM.DD.YYYY
+            $month = $dateObject->format('d');
+            $day   = $dateObject->format('m');
+            $year  = $dateObject->format('Y');
+            $formattedDate = $day . '.' . $month . '.' . $year;
+          } elseif ($ddPos > $mmPos) {
+            // Формат ячейки MM.DD.YYYY, данные вводились как MM.DD.YYYY
+            $month = $dateObject->format('m');
+            $day   = $dateObject->format('d');
+            $year  = $dateObject->format('Y');
+            $formattedDate = $day . '.' . $month . '.' . $year;
+          }
+        } else {
+          require __DIR__ . '/errors/date-format-error.php';
+          exit;
+        }
       } else {
         // Если это не дата, то просто получаем значение
         $dateValue = $sheet->getCell('A' . $row)->getValue();
 
         // Если значение выглядит как дата в строковом формате, например, "03/06/2023"
         $pattern = '/(\d{1,2})[\/\.\-\s](\d{1,2})[\/\.\-\s](\d{2,4})/'; // Регулярка для поиска даты
+
         $replacement = '$2.$1.$3';
 
         // Преобразуем строку даты в нужный формат
@@ -969,7 +1000,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['input_sheet'])) {
 
 
     $writer = new Xlsx($newSpreadsheet); // Создаем объект для записи в файл
-    $outputFileName = 'CGT_' . date('d.m.Y-H:i:s') . '.xlsx'; // Генерируем имя для сохранения файла
+    $outputFileName = 'CGT' . ' ' . $clientName . ' ' . date('d.m.Y') . '.xlsx'; // Генерируем имя для сохранения файла
 
     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     header('Content-Disposition: attachment; filename="' . $outputFileName . '"');
@@ -979,7 +1010,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['input_sheet'])) {
 
     $writer->save('php://output');
     exit;
-
   } catch (Throwable $e) {
     echo 'Ошибка при обработке файла: ', $e->getMessage();
   }
